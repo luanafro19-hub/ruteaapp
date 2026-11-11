@@ -1,0 +1,1719 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fbf9ff" />
+  <title>RUTEA · Viajes económicos por Perú</title>
+  <style>
+    :root {
+      --ink: #152a72;
+      --ink-strong: #0c287c;
+      --blue: #173dbd;
+      --blue-dark: #0c287c;
+      --blue-light: #2b56e8;
+      --lime: #b9f500;
+      --lime-soft: #e4ffa1;
+      --paper: #fbf9ff;
+      --lavender: #eeecff;
+      --lavender-2: #e5e3fb;
+      --muted: #686b7d;
+      --line: #d8d6e2;
+      --white: #fff;
+      --shadow: 0 12px 30px rgba(31, 35, 99, .10);
+      --shadow-sm: 0 4px 14px rgba(31, 35, 99, .06);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: #e6e2ec; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #e6e2ec;
+      color: #20223c;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button { border: 0; cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid rgba(23, 61, 189, .35); outline-offset: 3px; }
+
+    .app-shell {
+      width: min(100%, 430px);
+      min-height: 100vh;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      background: var(--paper);
+      box-shadow: 0 0 40px rgba(20, 20, 65, .14);
+    }
+    .screen { padding: 20px 16px 106px; min-height: 100vh; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+    
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .brand-logo-img {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      transition: transform .15s ease;
+    }
+    .brand-logo-img:hover { transform: scale(1.03); }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 14px; background: transparent; color: var(--ink-strong); font-size: 21px; display: grid; place-items: center; position: relative; }
+    .icon-btn:hover { background: var(--lavender); }
+    .notification-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); position: absolute; top: 5px; right: 7px; border: 2px solid var(--paper); }
+    
+    /* MASCOT RUTI AVATAR BUTTON */
+    .ruti-avatar-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      padding: 0;
+      background: var(--blue-dark);
+      border: 2.5px solid var(--lime);
+      box-shadow: 0 4px 12px rgba(10, 35, 120, .22);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: grid;
+      place-items: center;
+    }
+    .ruti-avatar-btn:hover { transform: scale(1.08); }
+    .ruti-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-greeting h1 { margin: 0; color: var(--ink-strong); font-size: 24px; letter-spacing: -1px; line-height: 1.1; }
+    .hero-greeting p { margin: 7px 0 18px; font-size: 13px; color: var(--muted); }
+
+    .budget-card { background: linear-gradient(145deg, #1536b5 0%, #102a84 75%); color: white; border-radius: var(--radius-xl); padding: 19px 16px 16px; box-shadow: 0 14px 26px rgba(15, 49, 171, .22); }
+    .eyebrow { text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; font-weight: 800; opacity: .85; display: flex; align-items: center; gap: 6px; }
+    .budget-value-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 4px 0 13px; }
+    .budget-number { font-size: 34px; line-height: 1; font-weight: 900; letter-spacing: -2px; }
+    .budget-number span { color: var(--lime); font-size: 21px; letter-spacing: -.5px; margin-right: 5px; }
+    .circle-control { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 24px; font-weight: 800; background: rgba(255,255,255,.12); color: #fff; }
+    .circle-control.plus { background: var(--lime); color: #0e2c8c; }
+    .budget-range { appearance: none; width: 100%; height: 8px; background: linear-gradient(90deg, var(--lime) 0 22%, rgba(255,255,255,.10) 22%); border-radius: 20px; outline: none; }
+    .budget-range::-webkit-slider-thumb { appearance: none; width: 23px; height: 23px; border-radius: 50%; background: var(--lime); border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+    .budget-range::-moz-range-thumb { width: 19px; height: 19px; border-radius: 50%; background: var(--lime); border: 3px solid #fff; }
+    .range-labels { display: flex; justify-content: space-between; margin: 8px 0 18px; font-size: 10px; opacity: .85; }
+    .date-select { width: 100%; padding: 12px 14px; border: 1px solid rgba(255,255,255,.15); border-radius: 19px; background: rgba(255,255,255,.08); color: white; font-weight: 700; appearance: none; }
+    .date-select option { color: #1f2544; }
+    .trip-types { display: flex; gap: 8px; margin-top: 13px; overflow-x: auto; scrollbar-width: none; }
+    .trip-types::-webkit-scrollbar, .chips::-webkit-scrollbar, .route-scroller::-webkit-scrollbar, .sight-scroller::-webkit-scrollbar { display: none; }
+    .type-chip { flex: 0 0 auto; padding: 8px 13px; border-radius: 999px; background: transparent; color: #fff; font-size: 11px; font-weight: 700; opacity: .82; }
+    .type-chip.active { background: var(--lime); color: #15348e; opacity: 1; }
+
+    .promo { margin: 18px 0 23px; display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: 20px; background: var(--lavender); color: var(--ink-strong); }
+    .promo-icon { width: 38px; height: 38px; border-radius: 50%; background: var(--lime); display: grid; place-items: center; font-size: 21px; flex: 0 0 auto; }
+    .promo-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--lime); object-fit: cover; flex: 0 0 40px; }
+    .promo-copy { flex: 1; min-width: 0; }
+    .promo-copy strong { display: block; font-size: 13px; }
+    .promo-copy span { display: block; font-size: 12px; color: #454967; margin-top: 2px; }
+    .promo-arrow { font-size: 22px; color: var(--ink-strong); }
+
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 12px; }
+    .section-head h2 { color: var(--ink-strong); margin: 0; font-size: 17px; letter-spacing: -.5px; display: flex; align-items: center; gap: 6px; }
+    .section-head .count-pill { background: var(--lavender); color: var(--blue); font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 800; }
+    .text-btn { color: var(--blue); font-weight: 800; font-size: 12px; background: transparent; }
+
+    /* Route cards with REAL PHOTOS */
+    .route-scroller { display: flex; gap: 12px; overflow-x: auto; padding: 0 1px 8px; scrollbar-width: none; }
+    .route-card { flex: 0 0 190px; background: var(--white); border-radius: 22px; overflow: hidden; box-shadow: 0 6px 18px rgba(40, 38, 100, .07); border: 1px solid rgba(32, 34, 77, .06); transition: transform .2s ease, box-shadow .2s ease; cursor: pointer; }
+    .route-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(40, 38, 100, .12); }
+    
+    .route-visual {
+      height: 136px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px;
+      color: white;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .route-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(6, 17, 56, .22) 0%, rgba(6, 17, 56, .15) 40%, rgba(6, 17, 56, .82) 100%);
+      z-index: 1;
+    }
+    .route-visual > * { position: relative; z-index: 2; }
+    
+    .route-visual-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
+    .price-badge { background: var(--lime); color: #123490; border-radius: 999px; padding: 5px 8px; font-weight: 900; font-size: 11px; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+    .photo-pill { background: rgba(12, 40, 124, .85); backdrop-filter: blur(4px); color: #fff; font-size: 10px; font-weight: 800; border-radius: 999px; padding: 4px 7px; display: inline-flex; align-items: center; gap: 3px; border: 1px solid rgba(255,255,255,.25); }
+    .route-visual-bottom h3 { margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -.4px; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+    .route-visual-bottom span { font-size: 10px; opacity: .9; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+
+    .route-card-body { padding: 10px 12px 12px; }
+    .route-meta { display: flex; justify-content: space-between; gap: 4px; color: var(--muted); font-size: 11px; margin-bottom: 6px; }
+    .route-meta b { color: #d48300; font-weight: 800; }
+    .route-features-preview { font-size: 10px; color: #434767; background: var(--lavender); padding: 5px 8px; border-radius: 999px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; }
+
+    /* Wide Route for Explore Page */
+    .page-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 17px; }
+    .page-title h1 { color: var(--ink-strong); font-size: 25px; letter-spacing: -1px; margin: 0; }
+    .page-title p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 16px; }
+    .filter-chip { border: 1px solid var(--line); background: var(--white); color: var(--ink-strong); padding: 9px 13px; border-radius: 999px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .filter-chip.active { background: var(--lime); border-color: var(--lime); }
+    .route-list { display: grid; gap: 14px; }
+    
+    .wide-route { background: white; border-radius: 22px; padding: 10px; display: flex; gap: 12px; box-shadow: 0 6px 18px rgba(40, 38, 100, .07); border: 1px solid rgba(32, 34, 77, .05); }
+    .wide-route-visual {
+      width: 124px;
+      height: 124px;
+      border-radius: 17px;
+      flex: 0 0 auto;
+      position: relative;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 8px;
+      color: white;
+    }
+    .wide-route-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(4, 19, 72, .15) 0%, rgba(4, 19, 72, .75) 100%);
+      z-index: 1;
+    }
+    .wide-route-visual > * { position: relative; z-index: 2; }
+    .wide-route-body { padding: 4px 4px 4px 0; min-width: 0; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .wide-route-body h3 { margin: 0; color: var(--ink-strong); font-size: 16px; font-weight: 900; }
+    .wide-route-body p { color: var(--muted); font-size: 11px; line-height: 1.35; margin: 4px 0 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .sights-pill-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+    .sight-mini-pill { font-size: 9px; font-weight: 800; color: #1b3da3; background: #eeecff; padding: 3px 6px; border-radius: 6px; }
+    .verify { color: #246b48; background: #eaffea; border-radius: 999px; font-size: 9px; font-weight: 800; padding: 4px 8px; display: inline-flex; gap: 3px; align-items: center; width: fit-content; }
+    .card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+    .card-bottom strong { color: var(--ink-strong); font-size: 17px; font-weight: 900; }
+    .small-action { border-radius: 12px; padding: 8px 12px; color: var(--ink-strong); background: var(--lime); font-size: 11px; font-weight: 900; transition: transform .15s; }
+    .small-action:hover { transform: scale(1.03); }
+
+    /* Sights Horizontal Carousel (Home page) */
+    .sight-scroller { display: flex; gap: 12px; overflow-x: auto; padding: 2px 1px 12px; scrollbar-width: none; }
+    .sight-strip-card {
+      flex: 0 0 210px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(20,24,60,.06);
+      cursor: pointer;
+      transition: transform .2s ease;
+    }
+    .sight-strip-card:hover { transform: translateY(-3px); }
+    .sight-strip-img-wrap {
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+      background: #dfdbe8;
+    }
+    .sight-strip-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .3s ease;
+    }
+    .sight-strip-card:hover .sight-strip-img { transform: scale(1.05); }
+    .sight-strip-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(12, 40, 124, .92);
+      color: var(--lime);
+      font-size: 9px;
+      font-weight: 900;
+      padding: 4px 7px;
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+    }
+    .sight-strip-body { padding: 10px 11px 11px; }
+    .sight-strip-dest { font-size: 10px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+    .sight-strip-title { font-size: 13px; font-weight: 900; color: var(--ink-strong); line-height: 1.25; margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sight-strip-loc { font-size: 10px; color: var(--muted); }
+
+    /* Bus, Trips, Profile */
+    .bus-card { background: white; border-radius: 22px; padding: 15px; box-shadow: 0 6px 18px rgba(40,38,100,.07); }
+    .bus-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .bus-brand { display: flex; align-items: center; gap: 10px; color: var(--ink-strong); font-weight: 900; }
+    .bus-logo { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; color: white; font-weight: 900; background: linear-gradient(135deg, #ef8354, #bd4e46); }
+    .bus-logo.blue { background: linear-gradient(135deg, #4269d4, #16268e); }
+    .bus-card small { color: var(--muted); font-size: 10px; }
+    .bus-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 13px; border-top: 1px solid #f0eef4; }
+    .bus-row strong { color: var(--ink-strong); font-size: 18px; }
+    .rating { color: #d98a00; font-size: 11px; font-weight: 800; }
+
+    .empty-card, .profile-card, .pass-preview { background: white; border-radius: 24px; padding: 21px; box-shadow: 0 6px 18px rgba(40,38,100,.07); text-align: center; }
+    .empty-card h2 { color: var(--ink-strong); margin: 0; font-size: 18px; }
+    .empty-card p { color: var(--muted); line-height: 1.45; font-size: 12px; margin: 8px auto 15px; max-width: 280px; }
+    .primary-btn { min-height: 48px; padding: 13px 19px; color: white; background: var(--blue); border-radius: 999px; font-weight: 900; box-shadow: 0 9px 15px rgba(23,61,189,.18); font-size: 14px; }
+    .primary-btn.lime { background: var(--lime); color: #123490; box-shadow: 0 6px 16px rgba(185, 245, 0, .35); }
+    .primary-btn.block { width: 100%; }
+    
+    /* PROFILE CARD WITH LLAMA AVATAR */
+    .profile-card { display: flex; align-items: center; gap: 14px; text-align: left; margin-bottom: 14px; }
+    .profile-avatar-wrap {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--lime);
+      box-shadow: 0 4px 14px rgba(10,35,120,.18);
+      flex: 0 0 58px;
+      background: var(--blue-dark);
+    }
+    .profile-avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .profile-card h2 { margin: 0; color: var(--ink-strong); font-size: 17px; }
+    .profile-card p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
+
+    .settings-list { overflow: hidden; background: white; border-radius: 21px; box-shadow: 0 6px 18px rgba(40,38,100,.07); }
+    .setting-row { display: flex; align-items: center; gap: 12px; padding: 16px; border-bottom: 1px solid #f1eff6; color: #333650; }
+    .setting-row:last-child { border-bottom: 0; }
+    .setting-icon { width: 32px; height: 32px; border-radius: 11px; background: var(--lavender); display: grid; place-items: center; }
+    .setting-row span:nth-child(2) { flex: 1; font-size: 13px; font-weight: 700; }
+    .setting-arrow { color: #aaaabd; }
+
+    /* Nav & FAB (MASCOT BUTTON) */
+    .bottom-nav { position: fixed; z-index: 10; bottom: 0; width: min(100%, 430px); display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; padding: 10px 10px max(10px, env(safe-area-inset-bottom)); background: rgba(255,255,255,.96); box-shadow: 0 -7px 18px rgba(40,38,100,.08); border-radius: 27px 27px 0 0; backdrop-filter: blur(12px); }
+    .nav-item { min-height: 48px; background: transparent; color: #74778d; display: grid; place-items: center; gap: 2px; border-radius: 17px; font-size: 10px; font-weight: 800; }
+    .nav-item .nav-icon { font-size: 19px; line-height: 1; }
+    .nav-item.active { background: var(--lime); color: var(--ink-strong); }
+    
+    .fab {
+      position: fixed;
+      right: max(18px, calc((100vw - 430px) / 2 + 18px));
+      bottom: 92px;
+      z-index: 9;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--ink-strong);
+      border: 3px solid var(--lime);
+      box-shadow: 0 10px 24px rgba(10, 31, 108, .35);
+      padding: 0;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .2s ease;
+      display: grid;
+      place-items: center;
+    }
+    .fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 14px 28px rgba(10, 31, 108, .45);
+    }
+    .fab-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Modals */
+    .modal-backdrop { position: fixed; z-index: 20; inset: 0; background: rgba(8, 17, 65, .52); display: grid; align-items: end; justify-content: center; backdrop-filter: blur(3px); }
+    .modal { width: min(100vw, 430px); max-height: 90vh; overflow-y: auto; background: var(--paper); border-radius: 29px 29px 0 0; padding: 20px 16px 30px; animation: rise .22s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes rise { from { transform: translateY(30px); opacity: .4; } to { transform: translateY(0); opacity: 1; } }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+    .modal-head h2 { color: var(--ink-strong); margin: 0; font-size: 20px; font-weight: 900; }
+    .close-btn { width: 34px; height: 34px; background: var(--lavender); border-radius: 50%; color: var(--ink-strong); font-size: 18px; display: grid; place-items: center; }
+
+    /* DETAIL MODAL WITH REAL PHOTO HERO */
+    .detail-visual {
+      height: 210px;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      position: relative;
+      color: #fff;
+      margin-bottom: 14px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .detail-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(4, 19, 72, .3) 0%, rgba(4, 19, 72, .15) 30%, rgba(4, 19, 72, .88) 100%);
+      z-index: 1;
+    }
+    .detail-visual > * { position: relative; z-index: 2; }
+    .detail-visual-top { display: flex; justify-content: space-between; align-items: center; }
+    .verified-photo-pill { background: rgba(185, 245, 0, .95); color: #0c287c; font-size: 11px; font-weight: 900; padding: 5px 10px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+    .detail-visual-bottom h3 { margin: 0; font-size: 26px; font-weight: 900; letter-spacing: -.6px; text-shadow: 0 2px 4px rgba(0,0,0,.5); }
+    .detail-visual-bottom p { margin: 4px 0 0; font-size: 12px; opacity: .95; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+
+    .detail-copy { color: #434767; font-size: 13px; line-height: 1.5; margin: 10px 0 14px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 14px 0; }
+    .info-box { background: white; border-radius: 16px; padding: 12px; border: 1px solid rgba(20,24,60,.05); }
+    .info-box small { display: block; color: var(--muted); font-size: 10px; }
+    .info-box strong { display: block; color: var(--ink-strong); font-size: 15px; margin-top: 4px; }
+
+    /* REAL SIGHTS SECTION (LUGARES PARA VER) */
+    .sights-section {
+      background: #f2f0fc;
+      border-radius: 24px;
+      padding: 16px 14px;
+      margin: 18px 0;
+      border: 1px solid rgba(23,61,189,.12);
+    }
+    .sights-head { margin-bottom: 14px; }
+    .sights-head-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--ink-strong); color: var(--lime); font-size: 10px; font-weight: 900; padding: 4px 9px; border-radius: 999px; margin-bottom: 6px; letter-spacing: .4px; }
+    .sights-head h2 { color: var(--ink-strong); font-size: 18px; margin: 0; font-weight: 900; letter-spacing: -.4px; }
+    .sights-head p { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+    
+    .sights-list { display: grid; gap: 14px; }
+    .sight-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(25, 30, 90, .07);
+      border: 1px solid rgba(20, 24, 70, .05);
+      transition: transform .2s ease;
+      cursor: pointer;
+    }
+    .sight-card:hover { transform: translateY(-2px); }
+    
+    .sight-img-container {
+      height: 180px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      background: #e2dfec;
+    }
+    .sight-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .35s ease;
+    }
+    .sight-card:hover .sight-photo { transform: scale(1.04); }
+    .sight-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+      backdrop-filter: blur(4px);
+    }
+    .sight-badge.patrimonio { background: #0c287c; color: var(--lime); }
+    .sight-badge.aventura { background: #173dbd; color: #fff; }
+    .sight-badge.cultura { background: #d96200; color: #fff; }
+    .sight-badge.arqueologia { background: #1c6b38; color: #eaffea; }
+    .sight-badge.gastronomia { background: #7b1fa2; color: #fff; }
+    .sight-badge.naturaleza { background: #00796b; color: #fff; }
+    
+    .sight-zoom-hint {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(12, 40, 124, .85);
+      backdrop-filter: blur(4px);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.25);
+    }
+    .sight-card-body { padding: 12px 14px 14px; }
+    .sight-title-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+    .sight-card-body h4 { margin: 0; color: var(--ink-strong); font-size: 15px; font-weight: 900; }
+    .sight-location { font-size: 11px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .sight-text { margin: 0 0 10px; font-size: 12px; line-height: 1.45; color: #444765; }
+    .sight-tip-box {
+      background: #f4f3fd;
+      border-left: 3px solid var(--blue);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 11px;
+      color: var(--ink-strong);
+      line-height: 1.4;
+    }
+    .sight-tip-box b { color: var(--blue); }
+
+    /* LIGHTBOX MODAL */
+    .lightbox-modal {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
+      background: rgba(5, 12, 45, .88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn .2s ease-out;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .lightbox-container {
+      width: min(100%, 410px);
+      background: white;
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0,0,0,.35);
+      animation: popIn .24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn { from { transform: scale(.93); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .lightbox-img-wrap {
+      height: 250px;
+      width: 100%;
+      position: relative;
+      background: #000;
+    }
+    .lightbox-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.65);
+      color: white;
+      font-size: 20px;
+      display: grid;
+      place-items: center;
+      backdrop-filter: blur(4px);
+      z-index: 5;
+    }
+    .lightbox-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--lime);
+      color: #0c287c;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 5px 9px;
+      border-radius: 999px;
+    }
+    .lightbox-content { padding: 16px; max-height: 50vh; overflow-y: auto; }
+    .lightbox-dest { font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: .6px; }
+    .lightbox-title { margin: 4px 0 8px; font-size: 18px; font-weight: 900; color: var(--ink-strong); }
+    .lightbox-loc { font-size: 12px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 4px; }
+    .lightbox-desc { font-size: 13px; line-height: 1.5; color: #373a56; margin: 0 0 12px; }
+    .lightbox-tip { background: #eef2ff; border-left: 3px solid var(--blue); border-radius: 10px; padding: 10px 12px; font-size: 12px; line-height: 1.45; color: var(--ink-strong); margin-bottom: 15px; }
+    .lightbox-actions { display: flex; gap: 8px; }
+
+    /* Costs & Booking */
+    .cost-box { background: var(--ink-strong); color: white; border-radius: 20px; padding: 15px; margin: 14px 0; }
+    .cost-line { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; font-size: 12px; opacity: .92; }
+    .cost-line.total { border-top: 1px solid rgba(255,255,255,.22); margin-top: 5px; padding-top: 12px; font-size: 17px; font-weight: 900; opacity: 1; }
+    .cost-line.total strong { color: var(--lime); }
+    .host-box { display: flex; gap: 10px; background: #efffe2; color: #285e32; border-radius: 17px; padding: 12px; font-size: 11px; line-height: 1.4; margin-bottom: 14px; }
+    .host-icon { font-size: 24px; }
+
+    /* CHAT MODAL WITH MASCOT */
+    .chat-head { background: var(--ink-strong); color: white; margin: -20px -16px 15px; padding: 18px 16px 20px; border-radius: 29px 29px 20px 20px; display: flex; align-items: center; gap: 12px; }
+    .chat-avatar-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      position: relative;
+      flex: 0 0 48px;
+      background: var(--blue-dark);
+    }
+    .chat-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 2px solid var(--lime);
+    }
+    .online-indicator {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--lime);
+      border: 2px solid var(--ink-strong);
+    }
+    .chat-head h2 { color: white; font-size: 18px; }
+    .chat-head p { margin: 3px 0 0; color: rgba(255,255,255,.72); font-size: 11px; }
+    .chat-feed { display: grid; gap: 10px; min-height: 180px; max-height: 320px; overflow-y: auto; margin-bottom: 12px; }
+    .bubble { max-width: 86%; border-radius: 17px; padding: 11px 12px; font-size: 12px; line-height: 1.45; }
+    .bubble.ruti { justify-self: start; background: white; color: #32344a; border-bottom-left-radius: 5px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+    .bubble.me { justify-self: end; background: var(--lime); color: #16368f; border-bottom-right-radius: 5px; font-weight: 700; }
+    .quick-replies { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+    .quick-chip { background: var(--lavender); color: var(--ink-strong); border-radius: 999px; padding: 9px 11px; font-size: 10px; font-weight: 800; transition: background .15s; }
+    .quick-chip:hover { background: var(--lime); }
+    .chat-input-row { display: flex; gap: 8px; }
+    .chat-input { flex: 1; min-width: 0; border: 1px solid var(--line); background: white; border-radius: 16px; padding: 12px; font-size: 12px; }
+    .send-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--blue); color: white; font-size: 18px; }
+
+    /* Payment & Ticket */
+    .pay-options { display: grid; gap: 9px; margin: 15px 0; }
+    .pay-option { display: flex; align-items: center; gap: 10px; background: white; border: 1px solid var(--line); border-radius: 17px; padding: 13px; color: #353850; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .pay-option.selected { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(23,61,189,.12); }
+    .pay-option input { accent-color: var(--blue); }
+    .pay-logo { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; color: white; font-size: 10px; font-weight: 900; background: #8326b5; }
+    .pay-logo.plin { background: #2b65de; }
+    .pay-logo.card { background: #303440; }
+    .ticket { background: white; border-radius: 25px; overflow: hidden; box-shadow: var(--shadow); }
+    .ticket-top { background: var(--ink-strong); color: white; padding: 18px; }
+    .ticket-top p { margin: 3px 0 0; opacity: .72; font-size: 11px; }
+    .ticket-main { padding: 18px; }
+    .qr { width: 156px; height: 156px; margin: 4px auto 17px; padding: 10px; border: 5px solid var(--ink-strong); border-radius: 13px; background: repeating-linear-gradient(45deg, #101d55 0 3px, white 3px 7px, #101d55 7px 9px, white 9px 13px); position: relative; }
+    .qr::after { content: "R"; position: absolute; inset: 46px; border: 7px solid white; background: var(--lime); color: var(--ink-strong); border-radius: 8px; display: grid; place-items: center; font-weight: 950; font-size: 24px; }
+    .ticket-route { text-align: center; color: var(--ink-strong); }
+    .ticket-route strong { font-size: 21px; }
+    .ticket-route p { color: var(--muted); font-size: 11px; margin: 5px 0; }
+    .ticket-detail { display: grid; gap: 9px; margin-top: 16px; padding-top: 15px; border-top: 1px dashed #c9c7d5; }
+    .ticket-detail div { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--muted); }
+    .ticket-detail b { color: #252942; }
+    .success-pill { display: inline-flex; align-items: center; gap: 5px; background: #e8ffd7; color: #276d38; border-radius: 999px; padding: 7px 9px; font-size: 10px; font-weight: 900; margin-bottom: 12px; }
+
+    .toast { position: fixed; z-index: 40; left: 50%; bottom: 87px; transform: translateX(-50%); width: max-content; max-width: calc(100vw - 36px); padding: 12px 15px; border-radius: 14px; background: #161936; color: white; font-size: 12px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+    .toast.show { opacity: 1; transform: translate(-50%, -5px); }
+    .muted-note { color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+    @media (min-width: 600px) {
+      .app-shell { margin: 18px auto; min-height: calc(100vh - 36px); border-radius: 30px; }
+      .bottom-nav { bottom: 18px; border-radius: 27px; }
+      .fab { bottom: 110px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="app"></div>
+  <div id="modal-root"></div>
+  <div id="lightbox-root"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const routes = [
+      {
+        id: 'lunahuana',
+        name: 'Lunahuaná',
+        department: 'Cañete · Lima Sur',
+        price: 180,
+        time: '3.5 h de Lima',
+        rating: '4.9',
+        category: 'Aventura, Río & Vinos',
+        heroImage: 'assets/lunahuana-rio.jpg',
+        fallbackHero: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/R%C3%ADo_Lunahuan%C3%A1.jpg',
+        description: 'Sol todo el año, río Cañete para canotaje, viñedos de uvina y el histórico puente de Catapalla en una escapada con todo incluido.',
+        activities: ['Canotaje en río Cañete', 'Cata en bodegas de pisco', 'Puente colgante Catapalla', 'Almuerzo camarones y sopa seca'],
+        bus: 'Civa Express · Salida Javier Prado',
+        sights: [
+          {
+            id: 'canotaje-rio',
+            title: 'Canotaje en el Río Cañete',
+            badge: 'FOTO REAL · RÍO CAÑETE',
+            tagType: 'aventura',
+            location: 'Lunahuaná · Rápidos clase II y III',
+            image: 'assets/lunahuana-canotaje.jpg',
+            fallback: 'assets/lunahuana-canotaje.jpg',
+            description: 'Foto real de canotaje en Lunahuaná. Descenso en balsa inflable por el cañón y rápidos del río Cañete en tramos de 8 a 10 km con el paisaje árido y soleado característico del valle, acompañados de guías profesionales certificados.',
+            tip: 'Incluye chaleco salvavidas reglamentario, casco, remo e instructor local de Lunahuaná. Lleva muda de ropa seca y zapatillas que se puedan mojar.'
+          },
+          {
+            id: 'puente-catapalla',
+            title: 'Puente Colgante de Catapalla',
+            badge: 'FOTO REAL · PATRIMONIO',
+            tagType: 'patrimonio',
+            location: 'Anexo Catapalla · Km 44',
+            image: 'assets/lunahuana-puente-catapalla.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Catapalla_Bridge%2C_Lunahuan%C3%A1%2C_Peru_%28Panoramic_view%29.jpg/1280px-Catapalla_Bridge%2C_Lunahuan%C3%A1%2C_Peru_%28Panoramic_view%29.jpg',
+            description: 'Emblemático puente colgante de madera y cables de acero construido a inicios del siglo XX sobre el río Cañete. Conecta el valle con las bodegas de vino, miel de abeja y polen del anexo de Catapalla.',
+            tip: 'Cruzarlo es libre y gratuito. La mejor luz para fotos panorámicas del río y las montañas es entre las 3:30 p. m. y 5:00 p. m.'
+          },
+          {
+            id: 'iglesia-plaza',
+            title: 'Plaza de Armas e Iglesia Matriz',
+            badge: 'FOTO REAL · CENTRO HISTÓRICO',
+            tagType: 'cultura',
+            location: 'Plaza Mayor de Lunahuaná',
+            image: 'assets/lunahuana-iglesia-plaza.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/c/c9/Lunahuana_Principal_Church.jpg',
+            description: 'La Iglesia Matriz Santiago Apóstol data del siglo XVII. Destaca por su imponente fachada colonial con arcos de adobe, retablos dorados y su agradable plaza rodeada de árboles y flores.',
+            tip: 'En el perímetro de la plaza encontrarás helados artesanales de lúcuma, pisco sour y maracuyá a S/ 5.'
+          },
+          {
+            id: 'incahuasi',
+            title: 'Sitio Arqueológico de Incahuasi',
+            badge: 'FOTO REAL · ARQUEOLOGÍA INCA',
+            tagType: 'arqueologia',
+            location: 'Paullo · Km 30 del valle',
+            image: 'assets/lunahuana-incahuasi.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Incahuasi_-_Lunahuan%C3%A1_01.jpg',
+            description: 'Significa "Casa del Inca" en quechua. Es la ciudadela y cuartel militar de adobe y piedra más importante de la costa central, edificado por el inca Túpac Yupanqui en su avance hacia el valle.',
+            tip: 'La visita guiada dura unos 40 minutos. Usa sombrero de ala ancha y protector solar ya que no hay sombra en el recorrido.'
+          },
+          {
+            id: 'vinedos-catapalla',
+            title: 'Viñedos y Bodegas Artesanales',
+            badge: 'FOTO REAL · GASTRONOMÍA',
+            tagType: 'gastronomia',
+            location: 'Valle de Catapalla y Socsi',
+            image: 'assets/lunahuana-vinedos.jpg',
+            fallback: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1200&q=80',
+            description: 'Recorrido por viñedos centenarios de uva quebranta, borgoña y la emblemática uva uvina, única con denominación en este valle. Podrás ver las cubas coloniales y probar piscos destilados en falca.',
+            tip: 'La cata de 4 variedades y la explicación del maestro pisquero están incluidas en tu paquete RUTEA.'
+          }
+        ]
+      },
+      {
+        id: 'paracas',
+        name: 'Paracas',
+        department: 'Pisco · Ica',
+        price: 240,
+        time: '4 h de Lima',
+        rating: '4.8',
+        category: 'Mar, Reserva & Islas',
+        heroImage: 'assets/paracas-playa-roja.jpg',
+        fallbackHero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Playa_Roja_-_Paracas_National_Reserve%2C_Ica.jpg/1280px-Playa_Roja_-_Paracas_National_Reserve%2C_Ica.jpg',
+        description: 'El azul intenso del océano Pacífico contrastando con acantilados de arena rojiza, lobos marinos y atardeceres mágicos.',
+        activities: ['Islas Ballestas en deslizador', 'Playa Roja y La Mina', 'Atardecer en El Chaco'],
+        bus: 'PerúBus · Plaza Norte y Javier Prado',
+        sights: [
+          {
+            id: 'playa-roja',
+            title: 'Playa Roja (Reserva Nacional)',
+            badge: 'FOTO REAL · PAISAJE ÚNICO',
+            tagType: 'naturaleza',
+            location: 'Reserva Nacional de Paracas',
+            image: 'assets/paracas-playa-roja.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Playa_Roja_-_Paracas_National_Reserve%2C_Ica.jpg/1280px-Playa_Roja_-_Paracas_National_Reserve%2C_Ica.jpg',
+            description: 'Uno de los paisajes más fotografiados del litoral peruano. Su arena rojiza proviene de la erosión de macizos de granodiorita rosada frente a las aguas turquesas del océano.',
+            tip: 'Es zona protegida intocable (solo para contemplar desde el mirador). Viste cortavientos porque la brisa marina es constante.'
+          },
+          {
+            id: 'islas-ballestas',
+            title: 'Islas Ballestas y Fauna Marina',
+            badge: 'FOTO REAL · FAUNA SILVESTRE',
+            tagType: 'aventura',
+            location: 'Bahía de Paracas',
+            image: 'assets/paracas-ballestas.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Paracas_-_Islas_Ballestas_-_PERU_%2833309594264%29.jpg/1280px-Paracas_-_Islas_Ballestas_-_PERU_%2833309594264%29.jpg',
+            description: 'Archipiélago rocoso poblado por miles de lobos marinos, pingüinos de Humboldt, aves guaneras y piqueros. En el trayecto marítimo se contempla el misterioso geoglifo de El Candelabro.',
+            tip: 'Los deslizadores zarpan temprano (8:00 a 10:00 a. m.) cuando el mar está sereno y no hay viento paracas.'
+          }
+        ]
+      },
+      {
+        id: 'canta',
+        name: 'Canta · Obrajillo',
+        department: 'Valle del Chillón · Sierra Lima',
+        price: 165,
+        time: '2.5 h de Lima',
+        rating: '4.7',
+        category: 'Montaña, Río & Cascadas',
+        heroImage: 'assets/canta-obrajillo.jpg',
+        fallbackHero: 'https://upload.wikimedia.org/wikipedia/commons/6/69/Ciudad_de_Obrajillo._Lima_%28Canta%29.jpg',
+        description: 'Campiña verde, aire puro andino, truchas frescas a la parrilla y senderos a pie hacia hermosas cascadas.',
+        activities: ['Pueblo tradicional de Obrajillo', 'Caminata a Cascada Velo de Novia', 'Truchas a la parrilla'],
+        bus: 'Civa Express / Colectivo Canta',
+        sights: [
+          {
+            id: 'obrajillo-pueblo',
+            title: 'Pueblo Tradicional de Obrajillo',
+            badge: 'FOTO REAL · CAMPIÑA ANDINA',
+            tagType: 'cultura',
+            location: 'Obrajillo · 2,800 m s.n.m.',
+            image: 'assets/canta-obrajillo.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/6/69/Ciudad_de_Obrajillo._Lima_%28Canta%29.jpg',
+            description: 'Pintoresco anexo a 3 km de Canta ubicado a orillas del río Chillón. Casas coloniales con techos de tejas, paseos a caballo por la campiña y hospitalidad comunitaria.',
+            tip: 'Los almuerzos campestres de trucha frita con papas nativas van desde S/ 18 en los restaurantes a la orilla del río.'
+          },
+          {
+            id: 'velo-novia',
+            title: 'Cascada Velo de Novia',
+            badge: 'FOTO REAL · CATARATA NATURAL',
+            tagType: 'naturaleza',
+            location: 'Sendero Obrajillo - Cascada',
+            image: 'assets/canta-cascada.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/d/d2/Velo_de_novia_Canta.jpg',
+            description: 'Hermosa caída de agua natural cristalina que desciende entre peñascos andinos. El sendero peatonal de 20 minutos cruza puentes rústicos de madera rodeados de eucaliptos.',
+            tip: 'Lleva calzado con buen agarre para las rocas húmedas y abrigo para el atardecer cuando baja la temperatura.'
+          }
+        ]
+      },
+      {
+        id: 'churin',
+        name: 'Churín Termal',
+        department: 'Oyón · Sierra Norte de Lima',
+        price: 210,
+        time: '5 h de Lima',
+        rating: '4.8',
+        category: 'Aguas Termales & Relajo',
+        heroImage: 'assets/churin-pueblo.jpg',
+        fallbackHero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Chur%C3%ADn.jpg/1280px-Chur%C3%ADn.jpg',
+        description: 'La capital de las aguas termales medicinales de Lima. Pozas naturales tibias ricas en minerales para aliviar el estrés.',
+        activities: ['Baños de la Juventud', 'Complejo Mamahuarmi', 'Cena de trucha y mates serranos'],
+        bus: 'Turismo Barranca / Beteta Express',
+        sights: [
+          {
+            id: 'churin-valle',
+            title: 'Pueblo Andino de Churín',
+            badge: 'FOTO REAL · VALLE INTERANDINO',
+            tagType: 'cultura',
+            location: 'Cuenca del Río Huaura · 2,080 m',
+            image: 'assets/churin-pueblo.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Chur%C3%ADn.jpg/1280px-Chur%C3%ADn.jpg',
+            description: 'Acogedora villa serrana rodeada de verdes cerros y clima templado seco. Famosa por sus quesos artesanales, manjar blanco y panes de leña en su calle principal.',
+            tip: 'El clima es templado de día y fresco de noche. Excelente lugar para comprar queso mantecoso andino a buen precio.'
+          },
+          {
+            id: 'churin-termas-complejo',
+            title: 'Complejo Termal Mamahuarmi',
+            badge: 'FOTO REAL · TERMAS NATURALES',
+            tagType: 'naturaleza',
+            location: 'Baños de Mamahuarmi',
+            image: 'assets/churin-termas.jpg',
+            fallback: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80',
+            description: 'Conjunto de pozas termales al aire libre rodeadas de cascadas y grutas naturales como la Poza de los Novios y el Velo de la Novia, alimentadas por manantiales de sulfuro y litio.',
+            tip: 'Los baños termales tienen mayor efecto relajante por la tarde o noche. Lleva toalla personal y sandalias antideslizantes.'
+          }
+        ]
+      },
+      {
+        id: 'huancaya',
+        name: 'Huancaya',
+        department: 'Reserva Nor Yauyos Cochas',
+        price: 260,
+        time: '6.5 h de Lima',
+        rating: '5.0',
+        category: 'Cascadas Turquesas & Cañón',
+        heroImage: 'assets/huancaya-cascadas.jpg',
+        fallbackHero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Cascadas_de_Cabracancha%2C_Huancaya%2C_Per%C3%BA.jpg/1280px-Cascadas_de_Cabracancha%2C_Huancaya%2C_Per%C3%BA.jpg',
+        description: 'Paraíso de cascadas escalonadas de agua esmeralda y puentes coloniales de piedra en la Reserva Paisajística más bella del Perú.',
+        activities: ['Paseo en bote por Laguna Huallhua', 'Cascadas de Cabracancha', 'Puente colonial de calicanto'],
+        bus: 'Turismo San Juan de Yauyos',
+        sights: [
+          {
+            id: 'huancaya-cabracancha',
+            title: 'Cascadas de Cabracancha',
+            badge: 'FOTO REAL · AGUAS TURQUESAS',
+            tagType: 'naturaleza',
+            location: 'Huancaya · Reserva Nor Yauyos',
+            image: 'assets/huancaya-cascadas.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Cascadas_de_Cabracancha%2C_Huancaya%2C_Per%C3%BA.jpg/1280px-Cascadas_de_Cabracancha%2C_Huancaya%2C_Per%C3%BA.jpg',
+            description: 'Impresionante escalinata natural de saltos de agua y pozas de color turquesa transparente formadas sobre toba volcánica y musgos fluviales en el río Huarco.',
+            tip: 'La caminata bordeando las cascadas es una de las más escénicas de Sudamérica. Respeta la señalización comunitaria.'
+          }
+        ]
+      },
+      {
+        id: 'huacachina',
+        name: 'Huacachina',
+        department: 'Ica Desierto',
+        price: 215,
+        time: '4.5 h de Lima',
+        rating: '4.9',
+        category: 'Oasis, Dunas & Sandboard',
+        heroImage: 'assets/huacachina-oasis.jpg',
+        fallbackHero: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Oasis_de_Huacachina%2C_Ica%2C_Per%C3%BA%2C_2015-07-29%2C_DD_18.JPG/960px-Oasis_de_Huacachina%2C_Ica%2C_Per%C3%BA%2C_2015-07-29%2C_DD_18.JPG',
+        description: 'El legendario oasis natural de América: laguna rodeada de palmeras, eucaliptos y las dunas de arena más altas para buggies.',
+        activities: ['Tubulares por las dunas', 'Sandboarding en la arena', 'Paseo en bote a pedal'],
+        bus: 'PerúBus · Terminal Ica',
+        sights: [
+          {
+            id: 'huacachina-laguna',
+            title: 'Laguna y Dunas del Oasis',
+            badge: 'FOTO REAL · OASIS DE AMÉRICA',
+            tagType: 'aventura',
+            location: 'Oasis de Huacachina · 5 km de Ica',
+            image: 'assets/huacachina-oasis.jpg',
+            fallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Oasis_de_Huacachina%2C_Ica%2C_Per%C3%BA%2C_2015-07-29%2C_DD_18.JPG/960px-Oasis_de_Huacachina%2C_Ica%2C_Per%C3%BA%2C_2015-07-29%2C_DD_18.JPG',
+            description: 'Oasis esmeralda enclavado en medio de inmensas dunas del desierto de Ica. Un rincón ideal para ver caer el sol sobre la arena dorada y deslizarse en tabla.',
+            tip: 'Sube a la duna norte a las 5:30 p. m. para contemplar uno de los atardeceres más hermosos de la costa peruana.'
+          }
+        ]
+      }
+    ];
+
+    const state = {
+      page: 'home',
+      budget: 200,
+      tripType: 'Todo incluido',
+      date: 'Este finde (14 - 15 Oct)',
+      modal: null,
+      selectedRoute: null,
+      selectedSight: null,
+      lightboxSight: null,
+      payment: 'Yape',
+      chat: [
+        { from: 'ruti', text: '¡Hola! Soy Ruti, tu pata mochilera 🦙 con gafas y mochila lista. Actualicé la foto de canotaje en el río Cañete (con los rápidos reales de Lunahuaná) y tengo mi nuevo avatar oficial. ¡Pregúntame cualquier duda!' }
+      ]
+    };
+
+    const app = document.getElementById('app');
+    const modalRoot = document.getElementById('modal-root');
+    const lightboxRoot = document.getElementById('lightbox-root');
+    const toastEl = document.getElementById('toast');
+
+    const icon = { home: '⌂', explore: '⌕', bus: '▣', trips: '♧', profile: '♙' };
+    function money(value) { return `S/ ${value}`; }
+    function routeById(id) { return routes.find(route => route.id === id) || routes[0]; }
+    function availableRoutes() { return routes.filter(route => route.price <= state.budget); }
+    function allSights() {
+      const list = [];
+      routes.forEach(r => {
+        if (r.sights) {
+          r.sights.forEach(s => list.push({ ...s, routeId: r.id, routeName: r.name }));
+        }
+      });
+      return list;
+    }
+
+    function logo() {
+      return `<div class="brand" data-action="page" data-page="home" aria-label="RUTEA">
+        <img src="assets/rutea-logo.png" onerror="this.onerror=null; this.src='assets/rutea-logo.png'" alt="RUTEA" class="brand-logo-img" />
+      </div>`;
+    }
+
+    function header() {
+      return `<header class="topbar">
+        ${logo()}
+        <div class="top-actions">
+          <button class="icon-btn" aria-label="Notificaciones" data-action="toast" data-message="🔔 Fotos reales y nueva versión de Ruti activa">♧<i class="notification-dot"></i></button>
+          <button class="ruti-avatar-btn" aria-label="Abrir a Ruti" data-action="chat" title="Hablar con Ruti la llama">
+            <img src="assets/ruti-avatar.png" alt="Ruti" class="ruti-avatar-img" />
+          </button>
+        </div>
+      </header>`;
+    }
+
+    function budgetCard() {
+      const progress = Math.max(0, Math.min(100, ((state.budget - 150) / 200) * 100));
+      return `<section class="budget-card" aria-label="Motor de búsqueda por presupuesto">
+        <div class="eyebrow"><span>🪙</span> Tengo para viajar...</div>
+        <div class="budget-value-row">
+          <button class="circle-control" data-action="budget-step" data-step="-10" aria-label="Reducir presupuesto">−</button>
+          <div class="budget-number"><span>S/</span>${state.budget}</div>
+          <button class="circle-control plus" data-action="budget-step" data-step="10" aria-label="Aumentar presupuesto">+</button>
+        </div>
+        <input class="budget-range" id="budget-range" type="range" min="150" max="350" step="10" value="${state.budget}" style="background: linear-gradient(90deg, var(--lime) 0 ${progress}%, rgba(255,255,255,.1) ${progress}% 100%)" aria-label="Presupuesto en soles" />
+        <div class="range-labels"><span>S/ 150 (Mochilero)</span><span>S/ 250 (Full day / 2D)</span><span>S/ 350 (Con todo)</span></div>
+        <select class="date-select" id="date-select" aria-label="Fecha del viaje">
+          <option ${state.date.includes('finde') ? 'selected' : ''}>Este finde (14 - 15 Oct)</option>
+          <option ${state.date.includes('feriado') ? 'selected' : ''}>Próximo feriado (1 - 3 Nov)</option>
+          <option ${state.date.includes('oferta') ? 'selected' : ''}>Cuando encuentre oferta</option>
+        </select>
+        <div class="trip-types">
+          ${['Todo incluido', 'Solo pasajes', 'Hospedajes'].map(type => `<button class="type-chip ${state.tripType === type ? 'active' : ''}" data-action="trip-type" data-value="${type}">${type}</button>`).join('')}
+        </div>
+      </section>`;
+    }
+
+    function routeCard(route) {
+      const sightCount = route.sights ? route.sights.length : 1;
+      return `<article class="route-card" data-action="detail" data-route="${route.id}" tabindex="0" aria-label="Ver ${route.name}">
+        <div class="route-visual" style="background-image: url('${route.heroImage}'), url('${route.fallbackHero}');">
+          <div class="route-visual-top">
+            <span class="price-badge">${money(route.price)} total</span>
+            <span class="photo-pill">📷 ${sightCount} fotos reales</span>
+          </div>
+          <div class="route-visual-bottom">
+            <h3>${route.name}</h3>
+            <span>${route.department}</span>
+          </div>
+        </div>
+        <div class="route-card-body">
+          <div class="route-meta">
+            <span>◷ ${route.time}</span>
+            <b>★ ${route.rating}</b>
+          </div>
+          <div class="route-features-preview">
+            📍 ${route.sights && route.sights[0] ? route.sights[0].title : route.activities[0]}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function sightStripCard(sight) {
+      return `<article class="sight-strip-card" data-action="lightbox" data-route="${sight.routeId}" data-sight="${sight.id}" tabindex="0">
+        <div class="sight-strip-img-wrap">
+          <img class="sight-strip-img" src="${sight.image}" onerror="this.onerror=null; this.src='${sight.fallback}'" alt="${sight.title}" loading="lazy" />
+          <span class="sight-strip-badge">${sight.badge.split('·')[1]?.trim() || 'FOTO REAL'}</span>
+        </div>
+        <div class="sight-strip-body">
+          <div class="sight-strip-dest">${sight.routeName}</div>
+          <h4 class="sight-strip-title">${sight.title}</h4>
+          <span class="sight-strip-loc">📍 ${sight.location}</span>
+        </div>
+      </article>`;
+    }
+
+    function wideRoute(route) {
+      const sightCount = route.sights ? route.sights.length : 1;
+      return `<article class="wide-route">
+        <div class="wide-route-visual" style="background-image: url('${route.heroImage}'), url('${route.fallbackHero}');" data-action="detail" data-route="${route.id}">
+          <span class="price-badge">${money(route.price)}</span>
+          <span class="photo-pill" style="font-size:9px">📷 ${sightCount} fotos</span>
+        </div>
+        <div class="wide-route-body">
+          <div>
+            <h3>${route.name}</h3>
+            <p>${route.description}</p>
+          </div>
+          <div class="sights-pill-row">
+            ${route.sights ? route.sights.slice(0, 2).map(s => `<span class="sight-mini-pill">📍 ${s.title}</span>`).join('') : ''}
+          </div>
+          <span class="verify">✓ Anfitrión Seguro · Fotos Reales</span>
+          <div class="card-bottom">
+            <strong>${money(route.price)}</strong>
+            <button class="small-action" data-action="detail" data-route="${route.id}">Ver lugares</button>
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function homePage() {
+      const matches = availableRoutes();
+      const sights = allSights();
+      return `<div class="screen">
+        ${header()}
+        <section class="hero-greeting">
+          <h1>¡Hola, Sebastián!</h1>
+          <p>Tu presupuesto marca el camino · Fotos reales verificadas</p>
+        </section>
+        ${budgetCard()}
+        
+        <section class="promo">
+          <div class="promo-icon">ϟ</div>
+          <div class="promo-copy">
+            <strong>Rutas Relámpago Estudiantes</strong>
+            <span>Hasta 15% dcto en Lunahuaná y Canta con carné universitario</span>
+          </div>
+          <span class="promo-arrow">›</span>
+        </section>
+
+        <!-- SECCIÓN DE RUTAS -->
+        <div class="section-head">
+          <h2>Rutas dentro de tus ${money(state.budget)} <span class="count-pill">${matches.length}</span></h2>
+          <button class="text-btn" data-action="page" data-page="explore">Ver todas (${routes.length})</button>
+        </div>
+        <div class="route-scroller">
+          ${matches.length ? matches.map(routeCard).join('') : `<p class="muted-note">Sube a S/ 210 o S/ 240 y Ruti te mostrará Churín o Paracas.</p>`}
+        </div>
+
+        <div style="height: 18px"></div>
+
+        <!-- SECCIÓN DE LUGARES PARA VER EN EL HOME -->
+        <div class="section-head">
+          <h2>Lugares para ver <span class="count-pill">Fotos Reales</span></h2>
+          <button class="text-btn" data-action="detail" data-route="lunahuana">Ver Lunahuaná</button>
+        </div>
+        <div class="sight-scroller">
+          ${sights.map(sightStripCard).join('')}
+        </div>
+
+        <div style="height: 14px"></div>
+
+        <div class="section-head">
+          <h2>Tip de Ruti</h2>
+          <button class="text-btn" data-action="chat">Pregúntale a Ruti</button>
+        </div>
+        <div class="promo" style="margin-top:0;cursor:pointer" data-action="chat">
+          <img src="assets/ruti-avatar.png" alt="Ruti" class="promo-avatar" />
+          <div class="promo-copy">
+            <strong>¿Quieres saber qué ver en Lunahuaná?</strong>
+            <span>Canotaje en el río Cañete, puente de Catapalla, iglesia colonial y bodegas de vino. ¡Toca aquí para conversar!</span>
+          </div>
+          <span class="promo-arrow">›</span>
+        </div>
+      </div>
+      ${bottomNav()}
+      ${fab()}`;
+    }
+
+    function explorePage() {
+      const filtered = availableRoutes();
+      return `<div class="screen">
+        ${header()}
+        <div class="page-title">
+          <div>
+            <h1>Explorar rutas</h1>
+            <p>Destinos peruanos verificados con fotos reales de cada lugar.</p>
+          </div>
+          <button class="icon-btn" data-action="toast" data-message="Filtros aplicados según tu presupuesto">☷</button>
+        </div>
+        <div class="chips">
+          <button class="filter-chip active">Hasta ${money(state.budget)}</button>
+          <button class="filter-chip" data-action="filter-cat" data-cat="all">Todos los destinos</button>
+          <button class="filter-chip" data-action="detail" data-route="lunahuana">Lunahuaná (5 lugares)</button>
+          <button class="filter-chip" data-action="detail" data-route="paracas">Paracas</button>
+        </div>
+        <div class="route-list">
+          ${filtered.length ? filtered.map(wideRoute).join('') : `
+            <div class="empty-card">
+              <img src="assets/ruti-avatar.png" alt="Ruti" style="width:72px;height:72px;border-radius:50%;margin:0 auto 10px;display:block;border:2px solid var(--lime)" />
+              <h2>Ruti está buscando</h2>
+              <p>Prueba aumentando el presupuesto a S/ 240 o S/ 260 para encontrar Paracas y Huancaya.</p>
+              <button class="primary-btn lime" data-action="budget-step" data-step="50">Subir presupuesto a S/ ${state.budget + 50}</button>
+            </div>
+          `}
+        </div>
+      </div>
+      ${bottomNav()}
+      ${fab()}`;
+    }
+
+    function busPage() {
+      return `<div class="screen">
+        ${header()}
+        <div class="page-title">
+          <div>
+            <h1>Buses verificados</h1>
+            <p>Empresas aliadas con tarifa blindada hacia Lunahuaná y más.</p>
+          </div>
+          <span class="verify">✓ MTC / RUTEA</span>
+        </div>
+        <div class="route-list">
+          <article class="bus-card">
+            <div class="bus-head">
+              <div class="bus-brand">
+                <span class="bus-logo">CE</span>
+                <span>Civa Express<small> · Minivan & Bus ejecutivo</small></span>
+              </div>
+              <span class="verify">✓ Verificada</span>
+            </div>
+            <div class="bus-row">
+              <div>
+                <small>Ruta Lima → Lunahuaná / Cañete</small>
+                <strong>06:45 a. m. · Javier Prado</strong>
+              </div>
+              <div style="text-align:right">
+                <span class="rating">★ 4.9 puntualidad</span><br>
+                <small>Incluido en paquete RUTA</small>
+              </div>
+            </div>
+          </article>
+          <article class="bus-card">
+            <div class="bus-head">
+              <div class="bus-brand">
+                <span class="bus-logo blue">PB</span>
+                <span>PerúBus<small> · Bus cama Panamericana Sur</small></span>
+              </div>
+              <span class="verify">✓ Verificada</span>
+            </div>
+            <div class="bus-row">
+              <div>
+                <small>Ruta Lima → Paracas / Pisco</small>
+                <strong>07:30 a. m. · Plaza Norte</strong>
+              </div>
+              <div style="text-align:right">
+                <span class="rating">★ 4.8 puntualidad</span><br>
+                <small>Incluido en paquete RUTA</small>
+              </div>
+            </div>
+          </article>
+          <div class="empty-card" style="padding:18px">
+            <div class="promo-icon" style="margin:auto">🛡️</div>
+            <h2 style="margin-top:10px;font-size:16px">Tarifa blindada activa</h2>
+            <p style="margin-bottom:0">Tu pasaje ida y vuelta está garantizado sin sobreprecios en el paradero ni en feriados.</p>
+          </div>
+        </div>
+      </div>
+      ${bottomNav()}
+      ${fab()}`;
+    }
+
+    function tripsPage() {
+      return `<div class="screen">
+        ${header()}
+        <div class="page-title">
+          <div>
+            <h1>Mis rutas</h1>
+            <p>Tus pases digitales e itinerario de lugares.</p>
+          </div>
+          <button class="icon-btn" data-action="pass">▣</button>
+        </div>
+        <div class="pass-preview">
+          <div class="success-pill">✓ Reserva confirmada</div>
+          <img src="assets/lunahuana-canotaje.jpg" alt="Lunahuaná" style="width:100%;height:130px;object-fit:cover;border-radius:18px;margin-bottom:12px;" />
+          <h2 style="margin:0;color:var(--ink-strong);font-size:20px">Lunahuaná · Todo Incluido</h2>
+          <p class="muted-note">14 - 15 Oct · 2 días / 1 noche · Con canotaje y fotos de ruta</p>
+          <div class="info-grid">
+            <div class="info-box" style="text-align:left">
+              <small>Pasajero</small>
+              <strong>Sebastián Rojas</strong>
+            </div>
+            <div class="info-box" style="text-align:left">
+              <small>Operación</small>
+              <strong>RT-8842</strong>
+            </div>
+          </div>
+          <button class="primary-btn block lime" data-action="pass" style="margin-bottom:8px">Ver pase digital con QR</button>
+          <button class="small-action" data-action="detail" data-route="lunahuana" style="width:100%;background:var(--lavender)">Ver lugares del viaje</button>
+        </div>
+      </div>
+      ${bottomNav()}
+      ${fab()}`;
+    }
+
+    function profilePage() {
+      return `<div class="screen">
+        ${header()}
+        <div class="page-title">
+          <div>
+            <h1>Tu perfil</h1>
+            <p>Todo listo para tu próxima escapada.</p>
+          </div>
+        </div>
+        <div class="profile-card">
+          <div class="profile-avatar-wrap">
+            <img src="assets/ruti-avatar.png" alt="Ruti Avatar" class="profile-avatar-img" />
+          </div>
+          <div>
+            <h2>Sebastián Rojas</h2>
+            <p>Viajero frecuente · 4 rutas completadas</p>
+          </div>
+        </div>
+        <div class="settings-list">
+          <div class="setting-row" data-action="toast" data-message="Datos verificados con DNI">
+            <span class="setting-icon">👤</span>
+            <span>Mis datos personales</span>
+            <span class="setting-arrow">›</span>
+          </div>
+          <div class="setting-row" data-action="toast" data-message="Pagos asociados con Yape y Plin">
+            <span class="setting-icon">💳</span>
+            <span>Métodos de pago</span>
+            <span class="setting-arrow">›</span>
+          </div>
+          <div class="setting-row" data-action="page" data-page="trips">
+            <span class="setting-icon">♧</span>
+            <span>Historial de viajes</span>
+            <span class="setting-arrow">›</span>
+          </div>
+          <div class="setting-row" data-action="chat">
+            <span class="setting-icon" style="padding:2px;overflow:hidden">
+              <img src="assets/ruti-avatar.png" alt="Ruti" style="width:26px;height:26px;border-radius:50%;object-fit:cover;" />
+            </span>
+            <span>Preguntar a Ruti la llama</span>
+            <span class="setting-arrow">›</span>
+          </div>
+        </div>
+        <div style="height:15px"></div>
+        <div class="promo">
+          <div class="promo-icon">💰</div>
+          <div class="promo-copy">
+            <strong>Tu ahorro acumulado</strong>
+            <span>Has ahorrado S/ 186 viajando con tarifa blindada RUTEA.</span>
+          </div>
+        </div>
+      </div>
+      ${bottomNav()}
+      ${fab()}`;
+    }
+
+    function bottomNav() {
+      const items = [
+        ['home', 'Inicio'],
+        ['explore', 'Explorar'],
+        ['bus', 'Buses'],
+        ['trips', 'Mis rutas'],
+        ['profile', 'Perfil']
+      ];
+      return `<nav class="bottom-nav" aria-label="Navegación principal">
+        ${items.map(([page, label]) => `<button class="nav-item ${state.page === page ? 'active' : ''}" data-action="page" data-page="${page}">
+          <span class="nav-icon">${icon[page]}</span>
+          <span>${label}</span>
+        </button>`).join('')}
+      </nav>`;
+    }
+
+    /* FLOATING ACTION BUTTON WITH RUTI LLAMA */
+    function fab() {
+      return `<button class="fab" data-action="chat" aria-label="Hablar con Ruti la llama" title="Hablar con Ruti">
+        <img src="assets/ruti-avatar.png" alt="Ruti" class="fab-img" />
+      </button>`;
+    }
+
+    /* DETALLE DE RUTA CON SECCIÓN DE LUGARES PARA VER */
+    function detailModal(route) {
+      const balance = state.budget - route.price;
+      const sights = route.sights || [];
+
+      return `<div class="modal-backdrop" data-action="close-modal">
+        <section class="modal" role="dialog" aria-modal="true" aria-label="Detalle de ${route.name}" data-stop-close="true">
+          <div class="modal-head">
+            <h2>Detalle de tu escapada</h2>
+            <button class="close-btn" data-action="close-modal" aria-label="Cerrar">×</button>
+          </div>
+          
+          <!-- FOTO HERO REAL -->
+          <div class="detail-visual" style="background-image: url('${route.heroImage}'), url('${route.fallbackHero}');">
+            <div class="detail-visual-top">
+              <span class="verified-photo-pill">✓ Fotos Reales Verificadas</span>
+              <span class="price-badge">${money(route.price)} cerrado</span>
+            </div>
+            <div class="detail-visual-bottom">
+              <h3>${route.name}</h3>
+              <p>📍 ${route.department} · ◷ ${route.time} · ★ ${route.rating}</p>
+            </div>
+          </div>
+
+          <p class="detail-copy">
+            <strong>Experiencia garantizada:</strong> ${route.description}
+          </p>
+
+          <div class="info-grid">
+            <div class="info-box">
+              <small>Duración paquete</small>
+              <strong>2 días · 1 noche</strong>
+            </div>
+            <div class="info-box">
+              <small>De tu presupuesto te queda</small>
+              <strong style="color:${balance >= 0 ? '#276d38' : '#bb4242'}">
+                ${balance >= 0 ? money(balance) : 'Ajustar presupuesto'}
+              </strong>
+            </div>
+          </div>
+
+          <!-- SECCIÓN PROTAGONISTA: LUGARES PARA VER CON FOTOS REALES -->
+          <div class="sights-section">
+            <div class="sights-head">
+              <div class="sights-head-pill">📸 FOTOS REALES VERIFICADAS</div>
+              <h2>Lugares para ver en ${route.name} (${sights.length})</h2>
+              <p>Toca cualquier foto para ampliarla y ver los consejos de visita de Ruti.</p>
+            </div>
+
+            <div class="sights-list">
+              ${sights.map(sight => `
+                <article class="sight-card" data-action="lightbox" data-route="${route.id}" data-sight="${sight.id}">
+                  <div class="sight-img-container">
+                    <img class="sight-photo" src="${sight.image}" onerror="this.onerror=null; this.src='${sight.fallback}'" alt="${sight.title}" loading="lazy" />
+                    <span class="sight-badge ${sight.tagType}">${sight.badge}</span>
+                    <span class="sight-zoom-hint">🔍 Ampliar foto</span>
+                  </div>
+                  <div class="sight-card-body">
+                    <div class="sight-title-row">
+                      <h4>${sight.title}</h4>
+                      <span class="sight-location">📍 ${sight.location}</span>
+                    </div>
+                    <p class="sight-text">${sight.description}</p>
+                    <div class="sight-tip-box">
+                      <b>💡 Tip de viaje:</b> ${sight.tip}
+                    </div>
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- ACTIVIDADES INCLUIDAS -->
+          <div class="section-head" style="margin-top:16px">
+            <h2>Qué incluye tu experiencia</h2>
+          </div>
+          <div class="chips" style="flex-wrap:wrap">
+            ${route.activities.map(activity => `<span class="filter-chip active">✓ ${activity}</span>`).join('')}
+          </div>
+
+          <!-- DESGLOSE TARIFA BLINDADA -->
+          <div class="cost-box">
+            <div class="cost-line">
+              <span>Transporte ida y vuelta (${route.bus})</span>
+              <b>${money(75)}</b>
+            </div>
+            <div class="cost-line">
+              <span>Alojamiento campestre / anfitrión</span>
+              <b>${money(60)}</b>
+            </div>
+            <div class="cost-line">
+              <span>Entradas y experiencias en los lugares</span>
+              <b>${money(route.price - 135)}</b>
+            </div>
+            <div class="cost-line total">
+              <span>Costo total cerrado</span>
+              <strong>${money(route.price)}</strong>
+            </div>
+          </div>
+
+          <div class="host-box">
+            <img src="assets/ruti-avatar.png" alt="Ruti" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--lime);flex:0 0 36px;" />
+            <span>
+              <b>Sello Anfitrión Seguro RUTEA</b><br>
+              Familia verificada en destino · baño privado · Wi-Fi · anfitrión te recibe en el terminal.
+            </span>
+          </div>
+
+          <button class="primary-btn lime block" data-action="checkout" data-route="${route.id}">
+            Reservar RUTA a ${route.name} · ${money(route.price)}
+          </button>
+        </section>
+      </div>`;
+    }
+
+    /* LIGHTBOX PARA VER FOTO REAL EN TAMAÑO COMPLETO */
+    function lightboxModal(sight, route) {
+      return `<div class="lightbox-modal" data-action="close-lightbox">
+        <div class="lightbox-container" data-stop-close="true" role="dialog" aria-modal="true">
+          <div class="lightbox-img-wrap">
+            <button class="lightbox-close" data-action="close-lightbox" aria-label="Cerrar">×</button>
+            <span class="lightbox-badge">${sight.badge}</span>
+            <img class="lightbox-img" src="${sight.image}" onerror="this.onerror=null; this.src='${sight.fallback}'" alt="${sight.title}" />
+          </div>
+          <div class="lightbox-content">
+            <div class="lightbox-dest">${route.name} · ${route.department}</div>
+            <h3 class="lightbox-title">${sight.title}</h3>
+            <div class="lightbox-loc">📍 ${sight.location}</div>
+            <p class="lightbox-desc">${sight.description}</p>
+            <div class="lightbox-tip">
+              <strong>💡 Consejo de Ruti:</strong> ${sight.tip}
+            </div>
+            <div class="lightbox-actions">
+              <button class="primary-btn lime block" data-action="close-lightbox-and-detail" data-route="${route.id}">
+                Ver ruta a ${route.name}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function checkoutModal(route) {
+      const options = [
+        ['Yape', 'YP', ''],
+        ['Plin', 'PL', 'plin'],
+        ['Tarjeta Débito/Crédito', '▣', 'card']
+      ];
+      return `<div class="modal-backdrop" data-action="close-modal">
+        <section class="modal" role="dialog" aria-modal="true" data-stop-close="true">
+          <div class="modal-head">
+            <h2>Confirma tu RUTA</h2>
+            <button class="close-btn" data-action="close-modal">×</button>
+          </div>
+          <div class="promo" style="margin:0 0 15px">
+            <div class="promo-icon">✓</div>
+            <div class="promo-copy">
+              <strong>${route.name} · Costo cerrado</strong>
+              <span>Transporte + hospedaje + ${route.sights ? route.sights.length : 3} lugares turísticos</span>
+            </div>
+            <b style="color:var(--ink-strong)">${money(route.price)}</b>
+          </div>
+          <p class="muted-note">Elige tu método de pago preferido. El pase digital con código QR se genera de inmediato.</p>
+          <div class="pay-options">
+            ${options.map(([name, short, cls]) => `
+              <label class="pay-option ${state.payment === name ? 'selected' : ''}">
+                <input type="radio" name="payment" value="${name}" ${state.payment === name ? 'checked' : ''}>
+                <span class="pay-logo ${cls}">${short}</span>
+                <span>${name}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div class="cost-box" style="margin-top:12px">
+            <div class="cost-line">
+              <span>Total a pagar</span>
+              <strong>${money(route.price)}</strong>
+            </div>
+          </div>
+          <button class="primary-btn lime block" data-action="pay" data-route="${route.id}">
+            Confirmar pago seguro con ${state.payment}
+          </button>
+          <p class="muted-note" style="text-align:center;margin-top:10px;margin-bottom:0">🔒 Tarifa blindada sin cobros ocultos.</p>
+        </section>
+      </div>`;
+    }
+
+    function passModal() {
+      const r = state.selectedRoute ? routeById(state.selectedRoute) : routes[0];
+      return `<div class="modal-backdrop" data-action="close-modal">
+        <section class="modal" role="dialog" aria-modal="true" data-stop-close="true">
+          <div class="modal-head">
+            <h2>Pase digital de viaje</h2>
+            <button class="close-btn" data-action="close-modal">×</button>
+          </div>
+          <div class="ticket">
+            <div class="ticket-top">
+              <img src="assets/rutea-logo.png" alt="RUTEA" style="height:34px;filter:brightness(0) invert(1);" />
+              <p>Tu paquete a ${r.name} está confirmado. ¡A disfrutar!</p>
+            </div>
+            <div class="ticket-main">
+              <div class="success-pill">✓ Pagado con ${state.payment}</div>
+              <div class="qr" aria-label="Código QR simulado"></div>
+              <div class="ticket-route">
+                <strong>${r.name}</strong>
+                <p>${state.date} · Lima → ${r.name}</p>
+              </div>
+              <div class="ticket-detail">
+                <div><span>Pasajero</span><b>Sebastián Rojas</b></div>
+                <div><span>Transporte</span><b>${r.bus}</b></div>
+                <div><span>Código</span><b>RT-8842</b></div>
+                <div><span>Lugares incluidos</span><b>${r.sights ? r.sights.length : 3} atractivos</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="host-box" style="margin-top:14px">
+            <img src="assets/ruti-avatar.png" alt="Ruti" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--lime);flex:0 0 34px;" />
+            <span>
+              <b>Tip de Ruti</b><br>
+              Llega 20 minutos antes al punto de partida y guarda una captura de este QR por si te quedas sin señal en el valle.
+            </span>
+          </div>
+          <button class="primary-btn lime block" data-action="save-pass">Descargar PDF / Guardar en Wallet</button>
+        </section>
+      </div>`;
+    }
+
+    /* CHAT CON RUTI LA LLAMA */
+    function chatModal() {
+      const quick = [
+        '¿Cómo es el canotaje en Lunahuaná?',
+        '¿Qué lugares ver en Lunahuaná?',
+        'Tengo S/ 200, ¿a dónde voy?',
+        '¿Cómo funciona la tarifa blindada?'
+      ];
+      return `<div class="modal-backdrop" data-action="close-modal">
+        <section class="modal" role="dialog" aria-modal="true" data-stop-close="true">
+          <div class="chat-head">
+            <div class="chat-avatar-wrap">
+              <img src="assets/ruti-avatar.png" alt="Ruti" class="chat-avatar-img" />
+              <span class="online-indicator"></span>
+            </div>
+            <div>
+              <h2 style="margin:0">Ruti la llama</h2>
+              <p>Tu pata mochilera experta en rutas de Perú</p>
+            </div>
+            <button class="close-btn" style="margin-left:auto;background:rgba(255,255,255,.14);color:white" data-action="close-modal">×</button>
+          </div>
+          <div class="chat-feed" id="chat-feed">
+            ${state.chat.map(m => `<div class="bubble ${m.from === 'ruti' ? 'ruti' : 'me'}">${m.text}</div>`).join('')}
+          </div>
+          <div class="quick-replies">
+            ${quick.map(text => `<button class="quick-chip" data-action="chat-message" data-message="${text}">${text}</button>`).join('')}
+          </div>
+          <form class="chat-input-row" id="chat-form">
+            <input class="chat-input" id="chat-input" placeholder="Pregúntale a Ruti sobre Lunahuaná, canotaje..." autocomplete="off" />
+            <button class="send-btn" aria-label="Enviar">➤</button>
+          </form>
+        </section>
+      </div>`;
+    }
+
+    function renderModal() {
+      if (!state.modal) {
+        modalRoot.innerHTML = '';
+        return;
+      }
+      if (state.modal === 'detail') modalRoot.innerHTML = detailModal(routeById(state.selectedRoute));
+      if (state.modal === 'checkout') modalRoot.innerHTML = checkoutModal(routeById(state.selectedRoute));
+      if (state.modal === 'pass') modalRoot.innerHTML = passModal();
+      if (state.modal === 'chat') modalRoot.innerHTML = chatModal();
+    }
+
+    function renderLightbox() {
+      if (!state.lightboxSight) {
+        lightboxRoot.innerHTML = '';
+        return;
+      }
+      const r = routeById(state.lightboxSight.routeId);
+      lightboxRoot.innerHTML = lightboxModal(state.lightboxSight, r);
+    }
+
+    function render() {
+      app.innerHTML = state.page === 'home' ? homePage() :
+                      state.page === 'explore' ? explorePage() :
+                      state.page === 'bus' ? busPage() :
+                      state.page === 'trips' ? tripsPage() :
+                      profilePage();
+      renderModal();
+      renderLightbox();
+    }
+
+    function toast(message) {
+      toastEl.textContent = message;
+      toastEl.classList.add('show');
+      clearTimeout(window.__ruteaToast);
+      window.__ruteaToast = setTimeout(() => toastEl.classList.remove('show'), 2600);
+    }
+
+    function respondTo(text) {
+      const normalized = text.toLowerCase();
+      let reply = '¡Buena pregunta! En cada ruta puedes tocar "Ver lugares" para ver fotos reales, precios y detalles de visita.';
+      
+      if (normalized.includes('canotaje') || normalized.includes('río') || normalized.includes('rio')) {
+        reply = '¡El canotaje en Lunahuaná es la aventura reina del río Cañete! 🛶 Navegas por rápidos clase II y III entre las montañas áridas y el valle soleado. Tu paquete RUTEA incluye el equipo reglamentario (chaleco salvavidas, casco, remo) y un guía profesional local certificado.';
+      } else if (normalized.includes('lunahuaná') || normalized.includes('lunahuana')) {
+        reply = '¡Lunahuaná es un golazo! 🛶 Tienes sol asegurado todo el año. Los lugares imperdibles que incluye tu paquete son: 1) Canotaje real en el río Cañete, 2) Puente Colgante de Catapalla, 3) Plaza colonial e Iglesia Matriz, 4) Fortaleza inca de Incahuasi, y 5) Visita a bodegas con cata de pisco y uvina. ¡Todo por S/ 180!';
+      } else if (normalized.includes('200')) {
+        reply = 'Con S/ 200 tienes dos opciones fijas dentro de presupuesto: 1) Lunahuaná (S/ 180, te sobran S/ 20) y 2) Canta y Obrajillo (S/ 165, te sobran S/ 35). Ambas con fotos reales y tarifa blindada.';
+      } else if (normalized.includes('blindada')) {
+        reply = 'La tarifa blindada es la garantía RUTEA: el precio que ves es exactamente lo que pagas por transporte ida y vuelta, hospedaje y las experiencias. Cero cobros sorpresa en el camino.';
+      } else if (normalized.includes('sello') || normalized.includes('anfitrión') || normalized.includes('anfitrion')) {
+        reply = 'El Sello Anfitrión Seguro garantiza que la familia hospedadora fue inspeccionada en persona: baño privado, habitación limpia, Wi-Fi y contacto telefónico directo.';
+      } else if (normalized.includes('qr') || normalized.includes('pase')) {
+        reply = 'Tu código QR funciona como boleto de bus y check-in con tu anfitrión. Lo puedes guardar como PDF o tomarle captura desde la sección "Mis rutas".';
+      }
+
+      state.chat.push({ from: 'me', text }, { from: 'ruti', text: reply });
+      renderModal();
+      setTimeout(() => {
+        const feed = document.getElementById('chat-feed');
+        if (feed) feed.scrollTop = feed.scrollHeight;
+      }, 50);
+    }
+
+    document.addEventListener('click', event => {
+      const target = event.target.closest('[data-action]');
+      if (!target) return;
+      const action = target.dataset.action;
+
+      if (action === 'page') {
+        state.page = target.dataset.page;
+        state.modal = null;
+        state.lightboxSight = null;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (action === 'budget-step') {
+        state.budget = Math.max(150, Math.min(350, state.budget + Number(target.dataset.step)));
+        render();
+      }
+      if (action === 'trip-type') {
+        state.tripType = target.dataset.value;
+        render();
+      }
+      if (action === 'detail') {
+        state.selectedRoute = target.dataset.route;
+        state.modal = 'detail';
+        state.lightboxSight = null;
+        renderModal();
+      }
+      if (action === 'lightbox') {
+        const r = routeById(target.dataset.route);
+        const s = r.sights?.find(item => item.id === target.dataset.sight) || r.sights?.[0];
+        if (s) {
+          state.lightboxSight = { ...s, routeId: r.id };
+          renderLightbox();
+        }
+      }
+      if (action === 'close-lightbox' || (action === 'close-lightbox' && target.classList.contains('lightbox-close'))) {
+        state.lightboxSight = null;
+        renderLightbox();
+      }
+      if (action === 'close-lightbox-and-detail') {
+        const routeId = target.dataset.route;
+        state.lightboxSight = null;
+        renderLightbox();
+        state.selectedRoute = routeId;
+        state.modal = 'detail';
+        renderModal();
+      }
+      if (action === 'checkout') {
+        state.selectedRoute = target.dataset.route;
+        state.modal = 'checkout';
+        renderModal();
+      }
+      if (action === 'pay') {
+        state.selectedRoute = target.dataset.route;
+        state.modal = 'pass';
+        renderModal();
+        toast('¡Pago exitoso! Tu pase digital con QR está confirmado');
+      }
+      if (action === 'pass') {
+        state.modal = 'pass';
+        renderModal();
+      }
+      if (action === 'chat') {
+        state.modal = 'chat';
+        renderModal();
+        setTimeout(() => document.getElementById('chat-input')?.focus(), 50);
+      }
+      if (action === 'chat-message') {
+        respondTo(target.dataset.message);
+      }
+      if (action === 'close-modal' && !target.closest('[data-stop-close]')) {
+        state.modal = null;
+        renderModal();
+      }
+      if (action === 'close-modal' && target.classList.contains('close-btn')) {
+        state.modal = null;
+        renderModal();
+      }
+      if (action === 'save-pass') {
+        toast('✓ Pase digital guardado en tu dispositivo');
+      }
+      if (action === 'toast') {
+        toast(target.dataset.message || 'Listo');
+      }
+    });
+
+    document.addEventListener('input', event => {
+      if (event.target.id === 'budget-range') {
+        state.budget = Number(event.target.value);
+        render();
+      }
+    });
+
+    document.addEventListener('change', event => {
+      if (event.target.id === 'date-select') {
+        state.date = event.target.value;
+        toast(`Fecha actualizada: ${state.date}`);
+      }
+      if (event.target.name === 'payment') {
+        state.payment = event.target.value;
+        renderModal();
+      }
+    });
+
+    document.addEventListener('submit', event => {
+      if (event.target.id !== 'chat-form') return;
+      event.preventDefault();
+      const input = document.getElementById('chat-input');
+      const value = input?.value.trim();
+      if (value) {
+        input.value = '';
+        respondTo(value);
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        if (state.lightboxSight) {
+          state.lightboxSight = null;
+          renderLightbox();
+        } else if (state.modal) {
+          state.modal = null;
+          renderModal();
+        }
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
